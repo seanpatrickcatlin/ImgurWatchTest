@@ -1,7 +1,7 @@
 # Imgur Watch Test
 An unofficial Imgur application for viewing random images on a website or mobile app with optional Apple Watch support.
 
-![](www/imgurwatchTestLogo.png?raw=true)
+![](www/imgurWatchTestLogo.png?raw=true)
 
 ## Why?
 I have been wanting to work with wearables for awhile now and I figured it was time to try something new in my spare time.
