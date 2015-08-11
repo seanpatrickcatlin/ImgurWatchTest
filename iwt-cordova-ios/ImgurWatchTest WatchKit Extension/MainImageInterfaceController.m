@@ -14,6 +14,8 @@
 
 @implementation MainImageInterfaceController
 
+@synthesize mainImage;
+
 - (void)awakeWithContext:(id)context {
     [super awakeWithContext:context];
     
@@ -23,6 +25,10 @@
 - (void)willActivate {
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
+
+    UIImage* img = [UIImage imageNamed:@"icon-60"];
+
+    [mainImage setImage:img];
 }
 
 - (void)didDeactivate {

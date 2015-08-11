@@ -11,4 +11,6 @@
 
 @interface MainImageInterfaceController : WKInterfaceController
 
+@property (nonatomic, retain) IBOutlet WKInterfaceImage* mainImage;
+
 @end

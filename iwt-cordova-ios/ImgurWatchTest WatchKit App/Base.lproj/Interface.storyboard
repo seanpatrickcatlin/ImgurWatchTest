@@ -25,8 +25,11 @@
             <objects>
                 <controller id="xFd-qL-OiX" customClass="MainImageInterfaceController">
                     <items>
-                        <label alignment="center" verticalAlignment="center" text="Hello World" id="hAn-In-FkY"/>
+                        <imageView width="1" height="1" alignment="left" contentMode="scaleAspectFill" id="KKZ-J1-Qvo"/>
                     </items>
+                    <connections>
+                        <outlet property="mainImage" destination="KKZ-J1-Qvo" id="Z36-ED-wCy"/>
+                    </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="517" y="354"/>
