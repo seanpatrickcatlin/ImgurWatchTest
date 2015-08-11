@@ -5,6 +5,9 @@ An unofficial Imgur application for viewing random images on a website or mobile
 
 Live demo of app without watch support available at [cowdino.com/iwt](http://cowdino.com/iwt)
 
+## Project Status
+Inactive for the time being due to issues listed below.
+
 ## Why?
 I have been wanting to work with wearables for awhile now and I figured it was time to try something new in my spare time.
 
@@ -14,11 +17,18 @@ I have been wanting to work with wearables for awhile now and I figured it was t
 3. Custom WatchKit extension
 4. Apple watch communication capabilities via cordova-plugin-apple-watch
 
+## Current Issues
+1. Automation
+  I am perfectly capable of manually adding a watchkit extension/app to an existing xcodeproject but I am struggling to find a way to automate this.  Generally I keep my cordova projects clean, never checking in an xcode project and allowing cordova to generate one for me based off of my config.xml file.  I then use custom cordova plugins and or custom cordova hooks to extend the base cordova xcode project.  My goal is that from a properly configured system with a fresh copy of the cordova projects source tree the xcode project can be dynamically generated based on the various methods cordova exposes duing the "cordova platform add" and "cordova prepare" commands.
+2. App Groups
+  Communication between an iOS application and a watchkit extension via MMWormhole uses app groups.  This would generally not be a problem, but I do not have a personal Apple developer account.  My development account is tied to my employer and I will not use that account for a personal project.  I will be needing to get my own account to continue development on this.
+
 #### App Behavior
 * Application displays a random image from imgur, animated and nsfw images are not shown.
 * Application has a "Next" button to request a new random image.
 * Application has a "Share" button to share the image link via email.
-* Application displays a "Send To Watch" button if an Apple Watch is available.
+* ~~Application displays a "Send To Watch" button if an Apple Watch is available.~~
+ * So we can send basic messages from watch to phone and phone to watch, but we cannot actually launch the phone app from the watch or launch the watch app from the phone.
 
 #### Watch App Behavior
 * Unknown for the most part, I do not own an Apple Watch, I have never used an Apple Watch, and I have never created a WatchKit extension before.
@@ -28,7 +38,9 @@ I have been wanting to work with wearables for awhile now and I figured it was t
 * Application should be able to run from local filesystem via a desktop web browser.
 * Application should be able to run from an actual web service via any javascript enabled web browser.
 * Application should be able to run when packaged as a cordova-ios application.
-* Application should be able to detect an Apple Watch, this exposes a "Send To Watch" button.
+* ~~Application should be able to detect an Apple Watch, this exposes a "Send To Watch" button.~~
+ * Application should pass some form of data to the watch.
+ * Watch app should pass some form of data to the phone app.
 
 #### Cordova? Javascript? jQuery? Isn't that overkill?
 Yes, writing this as a simple Objective-C application would be more efficient.  I spend most of my time working with javascript and Cordova though and the first project I would add Apple Watch functionality to is a javascript app that relies heavily on jQuery and is packaged with Cordova to produce iOS, Android, and WP8 application packages.  So since this is just a simple personal project, I figured I would recreate my full end result environment as much as possible.
