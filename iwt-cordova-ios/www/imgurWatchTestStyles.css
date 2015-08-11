@@ -1,0 +1,105 @@
+.iwtPageContent {
+    text-align: center;
+}
+
+html {
+    background-color: #eeeeee;
+}
+
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.loading {
+    -webkit-filter: saturate(0);
+}
+
+.iwtMaterialAppBar {
+    height: 64px;
+    line-height: 64px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    background-color: #FF5722;
+}
+
+.iwtMaterialAppBar .iwtMaterialAppBarTitle {
+    display: inline-block;
+    color: white;
+    margin-left: 16px;
+    font-size: 24px;
+}
+
+/*
+ Portrait mobile specific styles here
+ */
+@media screen and (max-width: 767px) and (max-height: 1023px) and (orientation: portrait) {
+    .iwtMaterialAppBar {
+        height: 56px;
+        line-height: 56px;
+    }
+
+    .iwtMaterialAppBar .iwtMaterialAppBarTitle {
+        font-size: 20px;
+    }
+}
+
+/*
+ Landscape mobile specific styles here
+ */
+@media screen and (max-width: 1023px) and (max-height: 767px) and (orientation: landscape) {
+    .iwtMaterialAppBar {
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .iwtMaterialAppBar .iwtMaterialAppBarTitle {
+        font-size: 16px;
+    }
+}
+
+.iwtButton {
+    display: inline-block;
+    min-width: 64px;
+    height: 36px;
+    line-height: 36px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    color: #2196F3;
+    cursor: pointer;
+}
+
+.iwtButton.hidden {
+    display: none;
+}
+
+.iwtButton.pseudoHover {
+    background-color: #dddddd;
+}
+
+.iwtButton.pseudoActive {
+    background-color: #cccccc;
+}
+
+.iwtFooter {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#iwtImage {
+    padding-top: 16px;
+}

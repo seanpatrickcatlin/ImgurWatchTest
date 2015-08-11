@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv='Content-type' content='text/html; charset=utf-8'/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ImgurWatchTest</title>
+        <link rel="stylesheet" type="text/css" href="imgurWatchTestStyles.css"/>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="external/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="imgurWatchTestApp.js"></script>
+    </head>
+    <body>
+        <div class="iwtMaterialAppBar">
+            <div class="iwtMaterialAppBarTitle">Imgur Watch Test</div>
+        </div>
+        <div class="iwtPageContent">
+            <a href="#" id="iwtImageLink" target="_blank">
+                <img id="iwtImage" src="imgurWatchTestLogo.png"/>
+            </a>
+            <div class="iwtFooter">
+                <div>
+                    <span id="nextButton" class="iwtButton">NEXT</span>
+                    <span id="shareButton" class="iwtButton">SHARE</span>
+                </div>
+                <div>
+                    <span id="sendButton" class="iwtButton hidden">SEND TO WATCH</span>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
