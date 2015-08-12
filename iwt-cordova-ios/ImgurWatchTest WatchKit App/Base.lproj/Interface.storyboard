@@ -43,7 +43,6 @@
                     </items>
                     <connections>
                         <outlet property="mainImage" destination="KKZ-J1-Qvo" id="Z36-ED-wCy"/>
-                        <outlet property="nextButton" destination="cyv-en-8F8" id="8ls-bl-jhj"/>
                         <outlet property="startStopButton" destination="B54-Ji-IYw" id="EZi-Lx-Mah"/>
                     </connections>
                 </controller>
