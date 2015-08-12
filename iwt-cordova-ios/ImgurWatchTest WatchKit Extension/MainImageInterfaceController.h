@@ -11,9 +11,13 @@
 
 @interface MainImageInterfaceController : WKInterfaceController
 
-@property (weak, nonatomic) IBOutlet WKInterfaceImage* mainImage;
+@property (weak, nonatomic) IBOutlet WKInterfaceButton* imageButton;
+@property (weak, nonatomic) IBOutlet WKInterfaceButton* prevButton;
+@property (weak, nonatomic) IBOutlet WKInterfaceButton* nextButton;
 @property (weak, nonatomic) IBOutlet WKInterfaceButton* startStopButton;
 
+-(IBAction)imageTap:(id)sender;
+-(IBAction)prevTap:(id)sender;
 -(IBAction)nextTap:(id)sender;
 -(IBAction)startStopTap:(id)sender;
 

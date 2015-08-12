@@ -11,9 +11,11 @@
 @interface MainImageInterfaceController ()
 
 @property (nonatomic) int imageNumber;
+@property (nonatomic) int availableImageCount;
 @property (nonatomic, retain) NSTimer* autoPlayTimer;
 
-- (void)updateImage;
+- (void)showNextImage;
+- (void)updateImage:(BOOL)forwards;
 - (void)stopAutoPlay;
 - (void)startAutoPlay;
 - (void)killAutoPlayTimer;
@@ -24,8 +26,11 @@
 
 @synthesize imageNumber;
 @synthesize autoPlayTimer;
+@synthesize availableImageCount;
 
-@synthesize mainImage;
+@synthesize imageButton;
+@synthesize prevButton;
+@synthesize nextButton;
 @synthesize startStopButton;
 
 - (void)awakeWithContext:(id)context {
@@ -36,12 +41,13 @@
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
 
-    self.imageNumber = 0;
+    self.imageNumber = -1;
+    self.availableImageCount = 20; // completely arbitrary number for testing
     self.autoPlayTimer = nil;
 
     [self.startStopButton setTitle:NSLocalizedString(@"Start", nil)];
 
-    [self updateImage];
+    [self showNextImage];
 }
 
 - (void)didDeactivate {
@@ -51,7 +57,26 @@
     [super didDeactivate];
 }
 
-- (void)updateImage {
+- (void)updateImage:(BOOL)forwards {
+    if(forwards) {
+        self.imageNumber++;
+    } else {
+        self.imageNumber--;
+    }
+
+    if(self.imageNumber <= 0) {
+        self.imageNumber = 0;
+        [self stopAutoPlay];
+    }
+
+    if(self.imageNumber >= self.availableImageCount) {
+        self.imageNumber = self.availableImageCount;
+        [self stopAutoPlay];
+    }
+
+    [self.prevButton setEnabled:(self.imageNumber > 0)];
+    [self.nextButton setEnabled:(self.imageNumber < self.availableImageCount)];
+
     UIImage* img = [UIImage imageNamed:@"icon-76@2x"];
 
     UIImageOrientation desiredOrientation = UIImageOrientationUp;
@@ -68,14 +93,26 @@
         img = [[UIImage alloc] initWithCGImage: img.CGImage scale: 1.0 orientation:desiredOrientation];
     }
 
-    [mainImage setImage:img];
+    [self.imageButton setBackgroundImage:img];
+}
 
-    self.imageNumber++;
+- (void)showNextImage {
+    [self updateImage:YES];
+}
+
+-(IBAction)imageTap:(id)sender {
+    NSLog(@"THE IMAGE BUTTON WAS TAPPED!!!");
+    [self stopAutoPlay];
+}
+
+-(IBAction)prevTap:(id)sender {
+    [self stopAutoPlay];
+    [self updateImage:NO];
 }
 
 -(IBAction)nextTap:(id)sender {
     [self stopAutoPlay];
-    [self updateImage];
+    [self updateImage:YES];
 }
 
 -(IBAction)startStopTap:(id)sender {
@@ -103,9 +140,9 @@
     [startStopButton setTitle:NSLocalizedString(@"Stop", nil)];
 
     // call update image once before creating the timer so that there is an immediate UI change for the user
-    [self updateImage];
+    [self showNextImage];
 
-    self.autoPlayTimer = [NSTimer scheduledTimerWithTimeInterval:0.75 target:self selector:@selector(updateImage) userInfo:nil repeats:YES];
+    self.autoPlayTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(showNextImage) userInfo:nil repeats:YES];
 }
 
 -(void) stopAutoPlay {
