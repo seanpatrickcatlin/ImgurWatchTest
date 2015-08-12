@@ -25,14 +25,30 @@
             <objects>
                 <controller id="xFd-qL-OiX" customClass="MainImageInterfaceController">
                     <items>
-                        <imageView width="1" height="1" alignment="left" contentMode="scaleAspectFill" id="KKZ-J1-Qvo"/>
+                        <imageView width="1" height="0.75" alignment="left" contentMode="scaleAspectFill" id="KKZ-J1-Qvo"/>
+                        <group width="1" height="0.25" alignment="left" id="FQi-OV-Zm7">
+                            <items>
+                                <button width="0.5" height="1" alignment="left" title="Next" id="cyv-en-8F8">
+                                    <connections>
+                                        <action selector="nextTap:" destination="xFd-qL-OiX" id="axR-JA-81v"/>
+                                    </connections>
+                                </button>
+                                <button width="0.5" height="1" alignment="left" title="Start" id="B54-Ji-IYw">
+                                    <connections>
+                                        <action selector="startStopTap:" destination="xFd-qL-OiX" id="zeN-o8-Qbg"/>
+                                    </connections>
+                                </button>
+                            </items>
+                        </group>
                     </items>
                     <connections>
                         <outlet property="mainImage" destination="KKZ-J1-Qvo" id="Z36-ED-wCy"/>
+                        <outlet property="nextButton" destination="cyv-en-8F8" id="8ls-bl-jhj"/>
+                        <outlet property="startStopButton" destination="B54-Ji-IYw" id="EZi-Lx-Mah"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="517" y="354"/>
+            <point key="canvasLocation" x="515" y="354"/>
         </scene>
     </scenes>
 </document>
