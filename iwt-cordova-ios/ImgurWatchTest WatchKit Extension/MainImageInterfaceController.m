@@ -50,6 +50,12 @@
 - (void)didDeactivate {
     // This method is called when watch view controller is no longer visible
     [super didDeactivate];
+
+    // kill the timer
+    if(self.loopTimer != nil) {
+        [self.loopTimer invalidate];
+    }
+    self.loopTimer = nil;
 }
 
 - (void)updateImage {
