@@ -11,22 +11,28 @@
 @interface MainImageInterfaceController ()
 
 @property (nonatomic) int imageNumber;
-@property (nonatomic) int availableImageCount;
+@property (nonatomic) int lastPageRequested;
+@property (nonatomic) NSString* lastImageUrl;
 @property (nonatomic, retain) NSTimer* autoPlayTimer;
+@property (nonatomic, retain) NSMutableArray* imageData;
+@property (nonatomic, retain) NSURLSessionDataTask* getImageListTask;
 
 - (void)showNextImage;
 - (void)updateImage:(BOOL)forwards;
 - (void)stopAutoPlay;
 - (void)startAutoPlay;
 - (void)killAutoPlayTimer;
+- (void)getNextPageOfImages;
 
 @end
 
 @implementation MainImageInterfaceController
 
+@synthesize imageData;
 @synthesize imageNumber;
 @synthesize autoPlayTimer;
-@synthesize availableImageCount;
+@synthesize getImageListTask;
+@synthesize lastPageRequested;
 
 @synthesize imageButton;
 @synthesize prevButton;
@@ -42,8 +48,11 @@
     [super willActivate];
 
     self.imageNumber = -1;
-    self.availableImageCount = 20; // completely arbitrary number for testing
+    self.lastPageRequested = -1;
     self.autoPlayTimer = nil;
+    self.imageData = [[NSMutableArray alloc] init];
+    self.getImageListTask = nil;
+    self.lastImageUrl = @"";
 
     [self.startStopButton setTitle:NSLocalizedString(@"Start", nil)];
 
@@ -52,6 +61,11 @@
 
 - (void)didDeactivate {
     [self killAutoPlayTimer];
+
+    if(self.getImageListTask != nil) {
+        [self.getImageListTask cancel];
+        self.getImageListTask = nil;
+    }
 
     // This method is called when watch view controller is no longer visible
     [super didDeactivate];
@@ -69,13 +83,31 @@
         [self stopAutoPlay];
     }
 
-    if(self.imageNumber >= self.availableImageCount) {
-        self.imageNumber = self.availableImageCount;
+    if(self.imageNumber >= [self.imageData count]) {
+        self.imageNumber = (int)[self.imageData count];
+        [self getNextPageOfImages];
         [self stopAutoPlay];
     }
 
     [self.prevButton setEnabled:(self.imageNumber > 0)];
-    [self.nextButton setEnabled:(self.imageNumber < self.availableImageCount)];
+    [self.nextButton setEnabled:(self.imageNumber < [self.imageData count])];
+
+    NSString* newImageUrl = @"";
+
+    if(self.imageNumber < [imageData count]) {
+        NSString* imageId = [[imageData objectAtIndex:self.imageNumber] valueForKey:@"id"];
+
+        newImageUrl = [NSString stringWithFormat:@"http://i.imgur.com/%@t.jpg", imageId];
+
+        NSLog(@"We should be showing image #%d [%@]", self.imageNumber, self.lastImageUrl);
+    }
+
+    if([newImageUrl isEqualToString:self.lastImageUrl]) {
+        NSLog(@"Image to display is the same as the one we just dispalyed, returning early");
+        return;
+    }
+
+    self.lastImageUrl = newImageUrl;
 
     UIImage* img = [UIImage imageNamed:@"icon-76@2x"];
 
@@ -90,7 +122,7 @@
     }
 
     if(desiredOrientation != UIImageOrientationUp) {
-        img = [[UIImage alloc] initWithCGImage: img.CGImage scale: 1.0 orientation:desiredOrientation];
+        img = [[UIImage alloc] initWithCGImage: img.CGImage scale: 0.25 orientation:desiredOrientation];
     }
 
     [self.imageButton setBackgroundImage:img];
@@ -149,6 +181,61 @@
     [self killAutoPlayTimer];
 
     [startStopButton setTitle:NSLocalizedString(@"Start", nil)];
+}
+
+- (void)getNextPageOfImages {
+    if(self.getImageListTask != nil) {
+        return;
+    }
+
+    BOOL resumeAutoPlay = (self.autoPlayTimer != nil);
+
+    [self stopAutoPlay];
+
+    self.lastPageRequested++;
+
+    NSString* imageListUrl = [NSString stringWithFormat:@"https://api.imgur.com/3/gallery/r/earthporn/time/%d", self.lastPageRequested];
+
+    NSURL *URL = [NSURL URLWithString:imageListUrl];
+    NSMutableURLRequest* imageListRequest = [NSMutableURLRequest requestWithURL:URL];
+    [imageListRequest setValue:@"Client-ID cc8240616b0b518" forHTTPHeaderField:@"Authorization"];
+
+    NSURLSession *session = [NSURLSession sharedSession];
+    self.getImageListTask = [session dataTaskWithRequest:imageListRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        self.getImageListTask = nil;
+
+        if(error != nil) {
+            NSLog(@"Error retrieving list of images: %@", error);
+            // TODO, show an alert here? implement retry logic?
+            return;
+        }
+
+        NSError* jsonError = nil;
+        NSArray* jsonDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+
+        if(jsonError != nil) {
+            NSLog(@"Error parsing json list of images: %@", error);
+            // TODO, show an alert here? implement retry logic?
+            return;
+        }
+
+        NSArray* jsonArray = [jsonDictionary valueForKey:@"data"];
+
+        for(NSDictionary* jsonItem in jsonArray) {
+            if(([[jsonItem valueForKey:@"nsfw"] boolValue] == NO) && ([[jsonItem valueForKey:@"animated"] boolValue] == NO)) {
+                [self.imageData addObject:jsonItem];
+            }
+        }
+
+        if(resumeAutoPlay == YES) {
+            [self startAutoPlay];
+        } else {
+            [self showNextImage];
+        }
+
+        }];
+    
+    [self.getImageListTask resume];
 }
 
 @end

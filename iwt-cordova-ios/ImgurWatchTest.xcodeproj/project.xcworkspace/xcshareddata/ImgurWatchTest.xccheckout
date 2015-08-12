@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>9E095909-BC7B-421B-A39C-FC5B9BCA008D</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>ImgurWatchTest</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>E6108E6C7992973FDC7D6BCC8EC549F86E25628E</key>
 		<string>https://github.com/snctln/ImgurWatchTest.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>iwt-cordova-ios/ImgurWatchTest.xcodeproj/project.xcworkspace</string>
+	<string>iwt-cordova-ios/ImgurWatchTest.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>E6108E6C7992973FDC7D6BCC8EC549F86E25628E</key>
