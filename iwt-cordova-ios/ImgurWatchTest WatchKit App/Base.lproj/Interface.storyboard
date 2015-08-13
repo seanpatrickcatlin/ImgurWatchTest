@@ -10,7 +10,7 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController">
                     <items>
-                        <button width="1" alignment="left" verticalAlignment="center" title="Show Image" id="4XE-1A-0fJ">
+                        <button alignment="center" verticalAlignment="center" title="Show Images" id="4XE-1A-0fJ">
                             <connections>
                                 <segue destination="xFd-qL-OiX" kind="push" identifier="ShowImage" id="KXE-aH-ExD"/>
                             </connections>
@@ -25,12 +25,7 @@
             <objects>
                 <controller id="xFd-qL-OiX" customClass="MainImageInterfaceController">
                     <items>
-                        <button width="1" height="0.75" alignment="left" id="FkH-Rz-Ilh">
-                            <accessibilityTraits key="accessibilityTraits" none="YES" button="YES" image="YES"/>
-                            <connections>
-                                <action selector="imageTap:" destination="xFd-qL-OiX" id="fjY-ZF-VSG"/>
-                            </connections>
-                        </button>
+                        <button width="1" height="0.75" alignment="left" id="brZ-7d-lPQ"/>
                         <group width="1" height="0.25" alignment="left" id="FQi-OV-Zm7">
                             <items>
                                 <button width="0.25" height="1" alignment="left" title="&lt;" id="cyv-en-8F8">
@@ -52,7 +47,7 @@
                         </group>
                     </items>
                     <connections>
-                        <outlet property="imageButton" destination="FkH-Rz-Ilh" id="CDf-fA-lwj"/>
+                        <outlet property="imageButton" destination="brZ-7d-lPQ" id="Vk4-oa-CEQ"/>
                         <outlet property="nextButton" destination="VPs-Gw-twh" id="5vR-rV-3Sf"/>
                         <outlet property="prevButton" destination="cyv-en-8F8" id="eNP-uj-5Hw"/>
                         <outlet property="startStopButton" destination="B54-Ji-IYw" id="EZi-Lx-Mah"/>

@@ -12,27 +12,32 @@
 
 @property (nonatomic) int imageNumber;
 @property (nonatomic) int lastPageRequested;
-@property (nonatomic) NSString* lastImageUrl;
-@property (nonatomic, retain) NSTimer* autoPlayTimer;
+@property (nonatomic) BOOL autoPlay;
+@property (nonatomic, retain) NSString* lastImageUrl;
+@property (nonatomic, retain) NSTimer* getNextImageTimer;;
 @property (nonatomic, retain) NSMutableArray* imageData;
-@property (nonatomic, retain) NSURLSessionDataTask* getImageListTask;
+@property (nonatomic, retain) NSURLSessionDataTask* getListOfImagesTask;
+@property (nonatomic, retain) NSURLSessionDataTask* getImageTask;
 
 - (void)showNextImage;
 - (void)updateImage:(BOOL)forwards;
 - (void)stopAutoPlay;
 - (void)startAutoPlay;
-- (void)killAutoPlayTimer;
 - (void)getNextPageOfImages;
+- (void)killTimer;
 
 @end
 
 @implementation MainImageInterfaceController
 
-@synthesize imageData;
 @synthesize imageNumber;
-@synthesize autoPlayTimer;
-@synthesize getImageListTask;
 @synthesize lastPageRequested;
+@synthesize autoPlay;
+@synthesize lastImageUrl;
+@synthesize getNextImageTimer;
+@synthesize imageData;
+@synthesize getListOfImagesTask;
+@synthesize getImageTask;
 
 @synthesize imageButton;
 @synthesize prevButton;
@@ -49,22 +54,36 @@
 
     self.imageNumber = -1;
     self.lastPageRequested = -1;
-    self.autoPlayTimer = nil;
-    self.imageData = [[NSMutableArray alloc] init];
-    self.getImageListTask = nil;
+    self.autoPlay = NO;
     self.lastImageUrl = @"";
+    self.getNextImageTimer = nil;
+    self.imageData = [[NSMutableArray alloc] init];
+    self.getListOfImagesTask = nil;
+    self.getImageTask = nil;
 
     [self.startStopButton setTitle:NSLocalizedString(@"Start", nil)];
+
+    [self.imageButton setTitle:@""];
+
+    UIImage* iconImage = [UIImage imageNamed:@"icon-76@2x"];
+    [self.imageButton setBackgroundImage:iconImage];
 
     [self showNextImage];
 }
 
 - (void)didDeactivate {
-    [self killAutoPlayTimer];
+    self.autoPlay = NO;
 
-    if(self.getImageListTask != nil) {
-        [self.getImageListTask cancel];
-        self.getImageListTask = nil;
+    [self killTimer];
+
+    if(self.getListOfImagesTask != nil) {
+        [self.getListOfImagesTask cancel];
+        self.getListOfImagesTask = nil;
+    }
+
+    if(self.getImageTask != nil) {
+        [self.getImageTask cancel];
+        self.getImageTask = nil;
     }
 
     // This method is called when watch view controller is no longer visible
@@ -72,6 +91,12 @@
 }
 
 - (void)updateImage:(BOOL)forwards {
+    if(self.getImageTask != nil) {
+        return;
+    }
+
+    [self killTimer];
+
     if(forwards) {
         self.imageNumber++;
     } else {
@@ -84,57 +109,83 @@
     }
 
     if(self.imageNumber >= [self.imageData count]) {
-        self.imageNumber = (int)[self.imageData count];
+        self.imageNumber = (int)[self.imageData count]-1;
         [self getNextPageOfImages];
         [self stopAutoPlay];
     }
 
     [self.prevButton setEnabled:(self.imageNumber > 0)];
-    [self.nextButton setEnabled:(self.imageNumber < [self.imageData count])];
 
     NSString* newImageUrl = @"";
 
     if(self.imageNumber < [imageData count]) {
-        NSString* imageId = [[imageData objectAtIndex:self.imageNumber] valueForKey:@"id"];
+        NSDictionary* imageObject = [imageData objectAtIndex:self.imageNumber];
+        NSString* imageId = [imageObject valueForKey:@"id"];
 
-        newImageUrl = [NSString stringWithFormat:@"http://i.imgur.com/%@t.jpg", imageId];
+        int maxWidth = (int)(self.contentFrame.size.width);
+        int maxHeight = (int)(self.contentFrame.size.height*0.75);
 
-        NSLog(@"We should be showing image #%d [%@]", self.imageNumber, self.lastImageUrl);
+        maxWidth*=2;
+        maxHeight*=2;
+
+        NSString* thumbnailModifier = @"h";
+
+        float heightScale = 1.0;
+        float widthScale = 1.0;
+
+        int imageWidth = [[imageObject valueForKey:@"width"] intValue];
+        int imageHeight = [[imageObject valueForKey:@"height"] intValue];
+
+        if(imageWidth > imageHeight) {
+            heightScale = (imageHeight / imageWidth);
+        } else {
+            widthScale = (imageWidth / imageHeight);
+        }
+
+        if((maxWidth < (160*widthScale)) || (maxHeight < (160*heightScale))) {
+            thumbnailModifier = @"t";
+        } else if((maxWidth < (320*widthScale)) || (maxHeight < (320*heightScale))) {
+            thumbnailModifier = @"m";
+        } else if((maxWidth < (640*widthScale)) || (maxHeight < (640*heightScale))) {
+            thumbnailModifier = @"l";
+        }
+
+        newImageUrl = [NSString stringWithFormat:@"http://i.imgur.com/%@%@.jpg", imageId, thumbnailModifier];
     }
 
     if([newImageUrl isEqualToString:self.lastImageUrl]) {
-        NSLog(@"Image to display is the same as the one we just dispalyed, returning early");
+        NSLog(@"Image to display is the same as the one we just displayed, returning early");
         return;
     }
 
     self.lastImageUrl = newImageUrl;
 
-    UIImage* img = [UIImage imageNamed:@"icon-76@2x"];
+    NSURL *URL = [NSURL URLWithString:self.lastImageUrl];
+    NSMutableURLRequest* imageRequest = [NSMutableURLRequest requestWithURL:URL];
+    NSURLSession *session = [NSURLSession sharedSession];
+    self.getImageTask = [session dataTaskWithRequest:imageRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        self.getImageTask = nil;
 
-    UIImageOrientation desiredOrientation = UIImageOrientationUp;
+        if(error != nil) {
+            NSLog(@"Error retrieving image: %@", error);
+            // TODO, show an alert here? implement retry logic?
+            return;
+        }
 
-    if((self.imageNumber%4) == 1) {
-        desiredOrientation = UIImageOrientationRight;
-    } else if((self.imageNumber%4) == 2) {
-        desiredOrientation = UIImageOrientationDown;
-    } else if((self.imageNumber%4) == 3) {
-        desiredOrientation = UIImageOrientationLeft;
-    }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.imageButton setBackgroundImageData:data];
 
-    if(desiredOrientation != UIImageOrientationUp) {
-        img = [[UIImage alloc] initWithCGImage: img.CGImage scale: 0.25 orientation:desiredOrientation];
-    }
+            if(self.autoPlay == YES) {
+                self.getNextImageTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(showNextImage) userInfo:nil repeats:NO];
+            }
+        });
+    }];
 
-    [self.imageButton setBackgroundImage:img];
+    [self.getImageTask resume];
 }
 
 - (void)showNextImage {
     [self updateImage:YES];
-}
-
--(IBAction)imageTap:(id)sender {
-    NSLog(@"THE IMAGE BUTTON WAS TAPPED!!!");
-    [self stopAutoPlay];
 }
 
 -(IBAction)prevTap:(id)sender {
@@ -148,47 +199,49 @@
 }
 
 -(IBAction)startStopTap:(id)sender {
-    if(self.autoPlayTimer == nil) {
-        [self startAutoPlay];
+    if(self.autoPlay == YES) {
+        [self stopAutoPlay];
         return;
     }
 
-    [self stopAutoPlay];
+    [self startAutoPlay];
 }
 
--(void) killAutoPlayTimer {
-    if(self.autoPlayTimer == nil) {
+-(void) killTimer {
+    if(getNextImageTimer == nil) {
         return;
     }
 
-    [self.autoPlayTimer invalidate];
-    self.autoPlayTimer = nil;
+    [getNextImageTimer invalidate];
+    getNextImageTimer = nil;
 }
 
 -(void) startAutoPlay {
-    // kill the timer just in case there is one already running
-    [self killAutoPlayTimer];
-
     [startStopButton setTitle:NSLocalizedString(@"Stop", nil)];
+
+    self.autoPlay = YES;
 
     // call update image once before creating the timer so that there is an immediate UI change for the user
     [self showNextImage];
-
-    self.autoPlayTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(showNextImage) userInfo:nil repeats:YES];
 }
 
 -(void) stopAutoPlay {
-    [self killAutoPlayTimer];
+    self.autoPlay = NO;
+
+    [self killTimer];
+
+    if(self.getImageTask != nil) {
+        [self.getImageTask cancel];
+        self.getImageTask = nil;
+    }
 
     [startStopButton setTitle:NSLocalizedString(@"Start", nil)];
 }
 
 - (void)getNextPageOfImages {
-    if(self.getImageListTask != nil) {
+    if(self.getListOfImagesTask != nil) {
         return;
     }
-
-    BOOL resumeAutoPlay = (self.autoPlayTimer != nil);
 
     [self stopAutoPlay];
 
@@ -201,8 +254,8 @@
     [imageListRequest setValue:@"Client-ID cc8240616b0b518" forHTTPHeaderField:@"Authorization"];
 
     NSURLSession *session = [NSURLSession sharedSession];
-    self.getImageListTask = [session dataTaskWithRequest:imageListRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        self.getImageListTask = nil;
+    self.getListOfImagesTask = [session dataTaskWithRequest:imageListRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        self.getListOfImagesTask = nil;
 
         if(error != nil) {
             NSLog(@"Error retrieving list of images: %@", error);
@@ -227,15 +280,11 @@
             }
         }
 
-        if(resumeAutoPlay == YES) {
-            [self startAutoPlay];
-        } else {
-            [self showNextImage];
-        }
+        [self showNextImage];
 
         }];
     
-    [self.getImageListTask resume];
+    [self.getListOfImagesTask resume];
 }
 
 @end

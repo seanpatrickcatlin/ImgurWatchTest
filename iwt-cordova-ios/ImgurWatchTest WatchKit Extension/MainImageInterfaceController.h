@@ -16,7 +16,6 @@
 @property (weak, nonatomic) IBOutlet WKInterfaceButton* nextButton;
 @property (weak, nonatomic) IBOutlet WKInterfaceButton* startStopButton;
 
--(IBAction)imageTap:(id)sender;
 -(IBAction)prevTap:(id)sender;
 -(IBAction)nextTap:(id)sender;
 -(IBAction)startStopTap:(id)sender;
