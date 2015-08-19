@@ -11,6 +11,8 @@
     <plugin name="cordova-plugin-whitelist" version="1" />
     <plugin name="cordova-plugin-statusbar" version="1.0.1" />
     <plugin name="cordova-plugin-apple-watch" spec="https://github.com/leecrossley/cordova-plugin-apple-watch" />
+    <plugin name="net.trentgardner.cordova.androidwear" spec="https://github.com/tgardner/cordova-androidwear" />
+    <plugin name="cordova-plugin-splashscreen" spec="^2.1.0" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -20,6 +22,26 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <icon src="graphics/ticons-generated-graphics/platform/android/res/drawable-xhdpi/appicon.png" />
+        <icon density="hdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-hdpi/appicon.png" />
+        <icon density="ldpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-ldpi/appicon.png" />
+        <icon density="mdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-mdpi/appicon.png" />
+        <icon density="xhdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-xhdpi/appicon.png" />
+        <icon density="xxhdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-xxhdpi/appicon.png" />
+        <icon density="xxxhdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-xxxhdpi/appicon.png" />
+        <splash src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-xhdpi/default.png" />
+        <splash density="land-hdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+        <splash density="land-ldpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+        <splash density="land-mdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+        <splash density="land-xhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+        <splash density="land-xxhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+        <splash density="land-xxxhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+        <splash density="port-hdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-hdpi/default.png" />
+        <splash density="port-ldpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-ldpi/default.png" />
+        <splash density="port-mdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-mdpi/default.png" />
+        <splash density="port-xhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-xhdpi/default.png" />
+        <splash density="port-xxhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-xxhdpi/default.png" />
+        <splash density="port-xxxhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-xxxhdpi/default.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
