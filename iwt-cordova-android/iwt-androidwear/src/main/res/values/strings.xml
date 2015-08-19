@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">iwt</string>
-    <string name="hello_round">Hello Round World!</string>
-    <string name="hello_square">Hello Square World!</string>
+    <string name="previous_button_label">&lt;</string>
+    <string name="next_button_label">&gt;</string>
+    <string name="start">START</string>
+    <string name="stop">STOP</string>
 </resources>
