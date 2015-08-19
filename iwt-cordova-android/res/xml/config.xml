@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.cowdino.iwt" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <preference name="loglevel" value="DEBUG" />
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="androidwear">
+        <param name="android-package" value="net.trentgardner.cordova.androidwear.AndroidWearPlugin" />
+    </feature>
+    <allow-intent href="market:*" />
+    <icon src="graphics/ticons-generated-graphics/platform/android/res/drawable-xhdpi/appicon.png" />
+    <icon density="hdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-hdpi/appicon.png" />
+    <icon density="ldpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-ldpi/appicon.png" />
+    <icon density="mdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-mdpi/appicon.png" />
+    <icon density="xhdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-xhdpi/appicon.png" />
+    <icon density="xxhdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-xxhdpi/appicon.png" />
+    <icon density="xxxhdpi" src="graphics/ticons-generated-graphics/platform/android/res/drawable-xxxhdpi/appicon.png" />
+    <splash src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-xhdpi/default.png" />
+    <splash density="land-hdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+    <splash density="land-ldpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+    <splash density="land-mdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+    <splash density="land-xhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+    <splash density="land-xxhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+    <splash density="land-xxxhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-land-hdpi/default.png" />
+    <splash density="port-hdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-hdpi/default.png" />
+    <splash density="port-ldpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-ldpi/default.png" />
+    <splash density="port-mdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-mdpi/default.png" />
+    <splash density="port-xhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-xhdpi/default.png" />
+    <splash density="port-xxhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-xxhdpi/default.png" />
+    <splash density="port-xxxhdpi" src="graphics/ticons-generated-graphics/app/assets/android/images/res-long-port-xxxhdpi/default.png" />
+    <name>ImgurWatchTest</name>
+    <description>
+        An unofficial Imgur application for viewing random images on a website or mobile app with optional Apple Watch support.
+    </description>
+    <author email="catlin.sean@gmail.com" href="http://cowdino.com">
+        Sean Catlin via cowdino
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#D84315" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+</widget>
